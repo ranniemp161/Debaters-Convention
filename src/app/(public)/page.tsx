@@ -20,7 +20,7 @@ export default async function LandingPage() {
       <section className="relative overflow-hidden py-32 md:py-48 lg:py-56 bg-gradient-to-br from-background via-muted/50 to-background">
         <div className="container px-4 md:px-6 relative z-10 flex flex-col items-center text-center space-y-8">
           <div className="space-y-4 max-w-3xl">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50 drop-shadow-sm">
+            <h1 className="w-fit mx-auto text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50 drop-shadow-sm">
               The Debaters Convention
             </h1>
             <p className="mx-auto max-w-[700px] text-muted-foreground text-xl md:text-2xl leading-relaxed">
