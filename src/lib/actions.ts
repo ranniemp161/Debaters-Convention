@@ -10,6 +10,7 @@ export async function authenticate(
 ) {
     try {
         const username = formData.get('username') as string
+        const password = formData.get('password') as string
         let redirectUrl = '/' // Default
 
         if (username) {
@@ -25,7 +26,7 @@ export async function authenticate(
             }
         }
 
-        await signIn('credentials', formData, { redirectTo: redirectUrl })
+        await signIn('credentials', { username, password, redirectTo: redirectUrl })
     } catch (error) {
         if (error instanceof AuthError) {
             switch (error.type) {

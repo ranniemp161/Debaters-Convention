@@ -9,6 +9,13 @@ export default auth((req) => {
     const { nextUrl } = req
     const role = req.auth?.user?.role
 
+    // Redirect authenticated users away from signin page
+    if (nextUrl.pathname === "/auth/signin" && isLoggedIn) {
+        if (role === "ADMIN") return NextResponse.redirect(new URL("/admin", nextUrl))
+        if (role === "WRITER") return NextResponse.redirect(new URL("/writer", nextUrl))
+        return NextResponse.redirect(new URL("/", nextUrl))
+    }
+
     if (nextUrl.pathname.startsWith("/admin")) {
         if (!isLoggedIn) return NextResponse.redirect(new URL("/auth/signin", nextUrl))
         if (role !== "ADMIN") return NextResponse.redirect(new URL("/", nextUrl))
