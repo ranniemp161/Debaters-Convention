@@ -88,18 +88,32 @@ export default async function ArticlesPage({
                                         Philosophy {/* Mock Category */}
                                     </span>
                                 </div>
-                                {/* Placeholder Image */}
-                                <div className="w-full h-full flex items-center justify-center text-muted-foreground/30 bg-gradient-to-br from-muted to-muted/50 group-hover:scale-105 transition-transform duration-500">
-                                    Article Thumbnail
-                                </div>
+                                {article.featuredImage ? (
+                                    <img
+                                        src={article.featuredImage}
+                                        alt={article.title}
+                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-muted-foreground/30 bg-gradient-to-br from-muted to-muted/50 group-hover:scale-105 transition-transform duration-500">
+                                        Article Thumbnail
+                                    </div>
+                                )}
                             </div>
 
                             <CardHeader className="space-y-3 p-6 pb-2">
-                                <CardTitle className="line-clamp-2 text-xl font-bold leading-snug group-hover:text-primary transition-colors">
-                                    <Link href={`/articles/${article.slug}`}>
-                                        {article.title}
-                                    </Link>
-                                </CardTitle>
+                                <div className="space-y-2">
+                                    <CardTitle className="line-clamp-2 text-xl font-bold leading-snug group-hover:text-primary transition-colors font-serif">
+                                        <Link href={`/articles/${article.slug}`}>
+                                            {article.title}
+                                        </Link>
+                                    </CardTitle>
+                                    {article.subtitle && (
+                                        <p className="line-clamp-2 text-sm text-muted-foreground italic font-serif">
+                                            {article.subtitle}
+                                        </p>
+                                    )}
+                                </div>
                             </CardHeader>
 
                             <CardContent className="p-6 pt-2">

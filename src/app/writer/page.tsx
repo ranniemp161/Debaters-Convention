@@ -37,7 +37,7 @@ export default async function WriterDashboard() {
                     <p className="text-muted-foreground">Manage your content and track approval status.</p>
                 </div>
                 <Button asChild>
-                    <Link href="/writer/submit">
+                    <Link href="/writer/editor">
                         <Plus className="mr-2 h-4 w-4" />
                         New Article
                     </Link>
@@ -74,7 +74,10 @@ export default async function WriterDashboard() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell>{article.createdAt.toLocaleDateString()}</TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="text-right space-x-2">
+                                        <Button variant="outline" size="sm" asChild>
+                                            <Link href={`/writer/editor/${article.id}`}>Edit</Link>
+                                        </Button>
                                         {article.status === 'APPROVED' && (
                                             <Button variant="link" size="sm" asChild>
                                                 <Link href={`/articles/${article.slug}`}>View Live</Link>

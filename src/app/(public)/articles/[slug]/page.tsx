@@ -26,9 +26,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             </Button>
 
             <div className="space-y-4">
-                <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl leading-tight">
+                <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl leading-tight font-serif">
                     {article.title}
                 </h1>
+                {article.subtitle && (
+                    <p className="text-2xl text-muted-foreground font-serif italic leading-relaxed">
+                        {article.subtitle}
+                    </p>
+                )}
                 <div className="flex items-center space-x-4 text-muted-foreground">
                     <div className="font-medium text-foreground">
                         {article.author.username}
@@ -51,6 +56,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                     )}
                 </div>
             </div>
+
+            {article.featuredImage && (
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg border bg-muted">
+                    <img
+                        src={article.featuredImage}
+                        alt={article.title}
+                        className="h-full w-full object-cover"
+                    />
+                </div>
+            )}
 
             <div
                 className="prose prose-lg dark:prose-invert max-w-none"

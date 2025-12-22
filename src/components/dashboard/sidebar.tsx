@@ -44,7 +44,7 @@ export async function Sidebar() {
                             </Link>
                         </Button>
                         <Button asChild variant="ghost" className="w-full justify-start gap-2">
-                            <Link href="/writer/submit">
+                            <Link href="/writer/editor">
                                 <PenSquare className="h-4 w-4" />
                                 Write New
                             </Link>

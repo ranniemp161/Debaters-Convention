@@ -52,3 +52,22 @@ export async function deleteUser(userId: string) {
 
     revalidatePath('/admin')
 }
+
+export async function deleteArticle(articleId: string) {
+    const session = await auth()
+
+    if (!session || !session.user || session.user.role !== 'ADMIN') {
+        return { message: "Unauthorized" }
+    }
+
+    try {
+        await prisma.article.delete({
+            where: { id: articleId },
+        })
+    } catch (error) {
+        return { message: "Database Error: Failed to delete article." }
+    }
+
+    revalidatePath('/admin')
+    revalidatePath('/')
+}

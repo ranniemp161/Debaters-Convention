@@ -1,6 +1,6 @@
 'use client'
 
-import { updateArticleStatus } from "@/lib/admin-actions"
+import { updateArticleStatus, deleteArticle } from "@/lib/admin-actions"
 import {
     Table,
     TableBody,
@@ -33,6 +33,12 @@ export function AdminArticlePanel({ articles }: { articles: Article[] }) {
         await updateArticleStatus(id, status)
     }
 
+    const handleDelete = async (id: string) => {
+        if (confirm("Are you sure you want to delete this article?")) {
+            await deleteArticle(id)
+        }
+    }
+
     const ArticleTable = ({ data, showActions = false }: { data: Article[], showActions?: boolean }) => (
         <Table>
             <TableHeader>
@@ -58,11 +64,13 @@ export function AdminArticlePanel({ articles }: { articles: Article[] }) {
                             <TableCell>{article.createdAt.toLocaleDateString()}</TableCell>
                             {showActions && (
                                 <TableCell className="text-right space-x-2">
-                                    <Button size="sm" variant="outline" className="text-green-600 hover:text-green-700 hover:bg-green-50" onClick={() => handleStatusUpdate(article.id, 'APPROVED')}>
-                                        Approve
-                                    </Button>
-                                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => handleStatusUpdate(article.id, 'REJECTED')}>
-                                        Discard
+                                    {article.status === 'PENDING' && (
+                                        <Button size="sm" variant="outline" className="text-green-600 hover:text-green-700 hover:bg-green-50" onClick={() => handleStatusUpdate(article.id, 'APPROVED')}>
+                                            Approve
+                                        </Button>
+                                    )}
+                                    <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => handleDelete(article.id)}>
+                                        Delete
                                     </Button>
                                 </TableCell>
                             )}
@@ -90,10 +98,10 @@ export function AdminArticlePanel({ articles }: { articles: Article[] }) {
                         <ArticleTable data={pendingArticles} showActions={true} />
                     </TabsContent>
                     <TabsContent value="approved">
-                        <ArticleTable data={approvedArticles} />
+                        <ArticleTable data={approvedArticles} showActions={true} />
                     </TabsContent>
                     <TabsContent value="rejected">
-                        <ArticleTable data={rejectedArticles} />
+                        <ArticleTable data={rejectedArticles} showActions={true} />
                     </TabsContent>
                 </Tabs>
             </CardContent>

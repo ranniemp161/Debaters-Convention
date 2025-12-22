@@ -127,10 +127,17 @@ export default async function LandingPage() {
           {featuredArticles.map((article) => (
             <Card key={article.id} className="group flex flex-col overflow-hidden border-none shadow-sm hover:shadow-md transition-all hover:-translate-y-1 bg-card">
               <div className="relative h-48 w-full bg-muted overflow-hidden">
-                {/* Placeholder for article image */}
-                <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-muted-foreground">
-                  Article Image
-                </div>
+                {article.featuredImage ? (
+                  <img
+                    src={article.featuredImage}
+                    alt={article.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-800 flex items-center justify-center text-muted-foreground">
+                    Article Image
+                  </div>
+                )}
                 {/* Tag */}
                 <div className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 uppercase tracking-wider rounded-sm">
                   Opinion
