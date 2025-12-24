@@ -14,6 +14,9 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
 
     const article = await prisma.article.findUnique({
         where: { id },
+        include: {
+            tags: true
+        }
     })
 
     if (!article) {
@@ -24,5 +27,9 @@ export default async function EditArticlePage({ params }: { params: Promise<{ id
         redirect('/writer')
     }
 
-    return <Editor article={article} />
+    const categories = await prisma.category.findMany({
+        orderBy: { name: 'asc' }
+    })
+
+    return <Editor article={article} categories={categories} />
 }

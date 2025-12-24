@@ -3,6 +3,8 @@ import { Editor } from "@/components/writer/editor"
 import { auth } from "@/auth"
 import { redirect } from "next/navigation"
 
+import { prisma } from "@/lib/prisma"
+
 export default async function NewArticlePage() {
     const session = await auth()
 
@@ -10,5 +12,9 @@ export default async function NewArticlePage() {
         redirect('/')
     }
 
-    return <Editor />
+    const categories = await prisma.category.findMany({
+        orderBy: { name: 'asc' }
+    })
+
+    return <Editor categories={categories} />
 }

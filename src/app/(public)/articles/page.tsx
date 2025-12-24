@@ -21,9 +21,14 @@ export default async function ArticlesPage({
     const articles = await prisma.article.findMany({
         where: {
             status: 'APPROVED',
-            ...(query ? { title: { contains: query } } : {})
+            ...(query ? { title: { contains: query } } : {}),
+            ...(topic && topic !== 'All' ? { category: { name: topic } } : {})
         },
-        include: { author: true },
+        include: {
+            author: true,
+            category: true,
+            tags: true
+        },
         orderBy: { createdAt: 'desc' },
         take: 9,
     })

@@ -14,6 +14,8 @@ const ArticleSchema = z.object({
     content: z.string().optional().default(""), // Allow empty for initial drafts
     featuredImage: z.any().optional().nullable(), // Allow File or string
     status: z.enum(['DRAFT', 'PENDING', 'APPROVED', 'REJECTED']).optional(),
+    categoryId: z.string().optional(),
+    tags: z.string().optional(), // Expecting comma separated string
 })
 
 async function uploadFile(file: File): Promise<string | null> {
@@ -83,6 +85,8 @@ export async function createArticle(prevState: any, formData: FormData) {
         content: formData.get('content'),
         featuredImage: formData.get('featuredImage'),
         status: formData.get('status') || 'PENDING',
+        categoryId: formData.get('categoryId'),
+        tags: formData.get('tags'),
     })
 
     if (!validatedFields.success) {
@@ -92,7 +96,7 @@ export async function createArticle(prevState: any, formData: FormData) {
         }
     }
 
-    let { title, subtitle, slug, content, featuredImage, status } = validatedFields.data
+    let { title, subtitle, slug, content, featuredImage, status, categoryId, tags } = validatedFields.data
     let featuredImageUrl: string | null = null
 
     if (featuredImage instanceof File) {
@@ -105,10 +109,16 @@ export async function createArticle(prevState: any, formData: FormData) {
         featuredImageUrl = featuredImage
     }
 
+    // Process tags
+    const tagNames = tags ? tags.split(',').map(t => t.trim()).filter(t => t.length > 0) : []
+    const tagConnectOrCreate = tagNames.map(name => ({
+        where: { name },
+        create: { name },
+    }))
+
     try {
         await prisma.article.create({
             data: {
-                // Force TS re-eval
                 title,
                 subtitle: subtitle || null,
                 slug,
@@ -116,9 +126,14 @@ export async function createArticle(prevState: any, formData: FormData) {
                 featuredImage: featuredImageUrl,
                 status: status || 'PENDING',
                 authorId: session.user.id,
+                categoryId: categoryId || null,
+                tags: {
+                    connectOrCreate: tagConnectOrCreate
+                }
             },
         })
     } catch (error) {
+        console.error("Create Article Error:", error)
         return { message: 'Database Error: Failed to Create Article.' }
     }
 
@@ -140,6 +155,8 @@ export async function updateArticle(articleId: string, prevState: any, formData:
         content: formData.get('content'),
         featuredImage: formData.get('featuredImage'),
         status: formData.get('status'),
+        categoryId: formData.get('categoryId'),
+        tags: formData.get('tags'),
     })
 
     if (!validatedFields.success) {
@@ -149,7 +166,7 @@ export async function updateArticle(articleId: string, prevState: any, formData:
         }
     }
 
-    let { title, subtitle, slug, content, featuredImage, status } = validatedFields.data
+    let { title, subtitle, slug, content, featuredImage, status, categoryId, tags } = validatedFields.data
     let featuredImageUrl: string | null | undefined = undefined
 
     if (featuredImage instanceof File && featuredImage.size > 0) {
@@ -160,11 +177,21 @@ export async function updateArticle(articleId: string, prevState: any, formData:
             return { message: 'Image Upload Failed.' }
         }
     } else if (typeof featuredImage === 'string') {
-        // If it's a string, it might be the existing URL or empty. 
-        // If the user didn't change the image, we often don't send it back unless using hidden input.
-        // Assuming if string is passed, it is the intent to set it.
         featuredImageUrl = featuredImage
     }
+
+    // Process tags
+    const tagNames = tags ? tags.split(',').map(t => t.trim()).filter(t => t.length > 0) : []
+
+    // We need to disconnect all existing tags and connect new ones to do a "replace"
+    // But connectOrCreate doesn't handle disconnection of removed tags automatically in a simple update call unless we explicitly set relation.
+    // The easiest way for many-to-many replacement in Prisma is:
+    // tags: { set: [], connectOrCreate: [...] }
+
+    const tagConnectOrCreate = tagNames.map(name => ({
+        where: { name },
+        create: { name },
+    }))
 
     try {
         const article = await prisma.article.findUnique({
@@ -181,6 +208,11 @@ export async function updateArticle(articleId: string, prevState: any, formData:
             slug,
             content,
             status: status ?? undefined,
+            categoryId: categoryId || null,
+            tags: {
+                set: [], // Clear existing tags
+                connectOrCreate: tagConnectOrCreate,
+            }
         }
 
         if (featuredImageUrl !== undefined) {
@@ -194,6 +226,7 @@ export async function updateArticle(articleId: string, prevState: any, formData:
             data: dataToUpdate,
         })
     } catch (error) {
+        console.error("Update Article Error:", error)
         return { message: 'Database Error: Failed to Update Article.' }
     }
 

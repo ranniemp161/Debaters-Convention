@@ -18,6 +18,13 @@ type Article = {
     content: string
     featuredImage?: string | null
     status: string
+    categoryId?: string | null
+    tags?: { id: string; name: string }[]
+}
+
+type Category = {
+    id: string
+    name: string
 }
 
 const initialState = {
@@ -25,7 +32,7 @@ const initialState = {
     errors: {} as Record<string, string[]>,
 }
 
-export function Editor({ article }: { article?: Article }) {
+export function Editor({ article, categories = [] }: { article?: Article; categories?: Category[] }) {
     const isEditing = !!article
     const updateArticleWithId = isEditing ? updateArticle.bind(null, article.id) : createArticle
 
@@ -222,6 +229,38 @@ export function Editor({ article }: { article?: Article }) {
                                     </div>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Categories & Tags */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">Organization</h3>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="categoryId" className="text-xs">Category</Label>
+                                <select
+                                    name="categoryId"
+                                    id="categoryId"
+                                    defaultValue={article?.categoryId || ""}
+                                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    <option value="">Uncategorized</option>
+                                    {categories.map(c => (
+                                        <option key={c.id} value={c.id}>{c.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="tags" className="text-xs">Tags (comma separated)</Label>
+                                <Input
+                                    name="tags"
+                                    id="tags"
+                                    placeholder="logic, truth, debate"
+                                    defaultValue={article?.tags?.map((t: any) => t.name).join(', ') || ""}
+                                    className="text-sm"
+                                />
+                                <p className="text-[10px] text-muted-foreground">Separate tags with commas.</p>
+                            </div>
                         </div>
                     </div>
                 </aside>
