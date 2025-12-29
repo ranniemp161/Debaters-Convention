@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import Link from 'next/link'
 
 export function LoginForm() {
     const [errorMessage, formAction, isPending] = useActionState(
@@ -49,6 +50,12 @@ export function LoginForm() {
                     {errorMessage && (
                         <p className="text-sm text-red-500">{errorMessage}</p>
                     )}
+                    <div className="mt-4 text-center text-sm">
+                        Don&apos;t have an account?{" "}
+                        <Link href="/auth/register" className="underline">
+                            Register
+                        </Link>
+                    </div>
                 </form>
             </CardContent>
         </Card>
