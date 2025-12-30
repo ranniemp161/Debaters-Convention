@@ -17,45 +17,66 @@ export default async function LandingPage() {
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)]">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-primary text-primary-foreground">
-        <div className="container px-4 md:px-6 py-24 md:py-32 lg:py-40 grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 z-10">
-            <div className="bg-secondary text-secondary-foreground inline-block px-3 py-1 rounded-sm text-sm font-semibold tracking-wide">
-              Welcome to Debaters Convention
-            </div>
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
-              Where <span className="text-secondary">Diverse Views</span> <br />
-              Meet Bold Dialogue
-            </h1>
-            <p className="text-primary-foreground/90 text-lg md:text-xl max-w-[600px] leading-relaxed">
-              Engaging in meaningful conversations on theology, philosophy, politics, and beyond. Join a community that values thoughtful discourse.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button asChild variant="secondary" size="lg" className="text-base font-bold px-8 h-12">
-                <Link href="/articles">
-                  Explore Articles <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="bg-primary/10 border-white/30 hover:bg-white/10 text-white hover:text-white text-base font-bold px-8 h-12">
-                <Link href="/about">
-                  Learn More
-                </Link>
-              </Button>
+      <section className="relative w-full bg-background overflow-hidden border-b flex flex-col lg:block">
+
+        {/* Visual Layer - Full Bleed */}
+        <div className="relative w-full h-[50vh] lg:absolute lg:top-0 lg:right-0 lg:w-1/2 lg:h-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden order-1 lg:order-2 z-0">
+          {/* Gradient Overlay for blending */}
+          <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-background via-transparent to-transparent z-10 lg:w-1/2"></div>
+
+          {/* Placeholder for 3D Bust Image */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-200 via-zinc-300 to-zinc-400 dark:from-zinc-700 dark:via-zinc-800 dark:to-zinc-900 flex items-center justify-center text-muted-foreground/20">
+              <span className="sr-only">Hero Image</span>
             </div>
           </div>
-          {/* Image Placeholder / Visual */}
-          <div className="relative h-[300px] md:h-[500px] rounded-lg overflow-hidden shadow-2xl bg-black/20">
-            {/* Note: This would typically be an Image component. Using a placeholder div for now matching the user's uploaded image style */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-transparent z-10"></div>
-            {/* We can use a generated placeholder or leave it blank if no specific image asset is available yet. 
-                 Ideally, we'd use <Image src="/hero-image.jpg" ... /> */}
-            <div className="w-full h-full bg-neutral-800 flex items-center justify-center text-white/20">
-              <span className="text-lg">Hero Image Area</span>
+
+          {/* Live Now Card */}
+          <div className="absolute bottom-6 right-6 lg:bottom-12 lg:right-12 z-20 bg-background/95 backdrop-blur-sm p-6 w-[280px] shadow-2xl border-l-4 border-[#C04928]">
+            <p className="text-secondary-foreground/70 font-bold text-xs tracking-widest uppercase mb-2">Live Now</p>
+            <h3 className="text-foreground font-serif font-bold text-xl leading-tight mb-3">The Ethics of AI Consciousness</h3>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+              </span>
+              1,240 Watching
             </div>
           </div>
         </div>
-        {/* Background Decorative Elements */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-black/10 to-transparent pointer-events-none" />
+
+        {/* Content Container - Aligned */}
+        <div className="container mx-auto px-4 relative z-10 order-2 lg:order-1 h-full pointer-events-none">
+          <div className="grid lg:grid-cols-2 lg:min-h-[calc(100vh-4rem)] items-center h-full">
+            {/* Left Content */}
+            <div className="flex flex-col justify-center px-6 md:px-12 lg:px-20 py-12 lg:py-0 pointer-events-auto">
+              <div className="w-12 h-1 bg-secondary mb-8"></div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground mb-6 leading-[1.1]">
+                Where <br />
+                <span className="font-serif text-secondary/90 italic">Minds</span> <br />
+                Collide
+              </h1>
+              <p className="text-lg md:text-xl text-muted-foreground/80 max-w-lg mb-10 leading-relaxed font-light">
+                A sanctuary for rigorous dialectic in philosophy and theology. Challenge your assumptions in an era of intellectual modernism.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Button asChild className="bg-[#C04928] hover:bg-[#A03518] text-white rounded-none px-8 py-7 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
+                  <Link href="/articles">
+                    Watch Latest Debate
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="rounded-none px-8 py-7 text-lg font-semibold border-input bg-transparent hover:bg-muted transition-all text-foreground">
+                  <Link href="/articles?topic=all">
+                    Explore Topics <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Spacer */}
+            <div className="hidden lg:block"></div>
+          </div>
+        </div>
       </section>
 
       {/* Explore Topics Section */}
