@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, BookOpen, Users, MessageSquare } from "lucide-react"
-
+import Image from "next/image"
 export const dynamic = 'force-dynamic'
 
 export default async function LandingPage() {
@@ -19,16 +19,20 @@ export default async function LandingPage() {
       {/* Hero Section */}
       <section className="relative w-full bg-background overflow-hidden border-b flex flex-col lg:block">
 
+
         {/* Visual Layer - Full Bleed */}
         <div className="relative w-full h-[50vh] lg:absolute lg:top-0 lg:right-0 lg:w-1/2 lg:h-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden order-1 lg:order-2 z-0">
-          {/* Gradient Overlay for blending */}
-          <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-background via-transparent to-transparent z-10 lg:w-1/2"></div>
-
-          {/* Placeholder for 3D Bust Image */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-zinc-200 via-zinc-300 to-zinc-400 dark:from-zinc-700 dark:via-zinc-800 dark:to-zinc-900 flex items-center justify-center text-muted-foreground/20">
-              <span className="sr-only">Hero Image</span>
-            </div>
+          {/* Hero Image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/hero-image.png"
+              alt="Philosophy Bust"
+              fill
+              className="object-cover"
+              priority
+            />
+            {/* Gradient Overlay for blending */}
+            <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-background via-transparent to-transparent z-10 lg:w-2/3"></div>
           </div>
 
           {/* Live Now Card */}
