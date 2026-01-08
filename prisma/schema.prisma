@@ -9,39 +9,39 @@ datasource db {
 
 model User {
   id        String    @id @default(cuid())
-  name      String?
   username  String    @unique
   password  String
   role      String    @default("WRITER")
   createdAt DateTime  @default(now())
+  name      String?
   articles  Article[]
 }
 
 model Article {
-  id        String    @id @default(cuid())
-  title     String
-  subtitle  String?
-  slug      String    @unique
-  content   String
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  content       String
+  status        String    @default("PENDING")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  authorId      String
   featuredImage String?
-  status    String    @default("PENDING")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  authorId  String
-  author    User      @relation(fields: [authorId], references: [id])
-  comments  Comment[]
-  categoryId String?
-  category  Category? @relation(fields: [categoryId], references: [id])
-  tags      Tag[]
+  subtitle      String?
+  categoryId    String?
+  author        User      @relation(fields: [authorId], references: [id])
+  category      Category? @relation(fields: [categoryId], references: [id])
+  comments      Comment[]
+  tags          Tag[]     @relation("ArticleToTag")
 }
 
 model Comment {
-  id        String   @id @default(cuid())
-  content   String
+  id         String   @id @default(cuid())
+  content    String
   authorName String
-  articleId String
-  article   Article  @relation(fields: [articleId], references: [id])
-  createdAt DateTime @default(now())
+  articleId  String
+  createdAt  DateTime @default(now())
+  article    Article  @relation(fields: [articleId], references: [id])
 }
 
 model Category {
@@ -54,5 +54,5 @@ model Category {
 model Tag {
   id       String    @id @default(cuid())
   name     String    @unique
-  articles Article[]
+  articles Article[] @relation("ArticleToTag")
 }

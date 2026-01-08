@@ -5,7 +5,7 @@ export const authConfig = {
     pages: {
         signIn: '/auth/signin',
     },
-    secret: "hardcoded-secret-for-dev",
+
     callbacks: {
         async session({ session, token }) {
             if (token.sub && session.user) {
