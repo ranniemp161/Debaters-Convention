@@ -6,11 +6,11 @@ import { ArrowLeft } from "lucide-react"
 import { SocialShare } from "@/components/SocialShare"
 import { CommentSection } from "@/components/CommentSection"
 import { ReadMore } from "@/components/ReadMore"
+import { Metadata } from "next"
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params
-
-    const article = await prisma.article.findUnique({
+// Helper to fetch article data
+async function getArticle(slug: string) {
+    return await prisma.article.findUnique({
         where: { slug },
         include: {
             author: true,
@@ -21,6 +21,52 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             }
         },
     })
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params
+    const article = await getArticle(slug)
+
+    if (!article) {
+        return {
+            title: 'Article Not Found',
+        }
+    }
+
+    const title = article.title
+    const description = article.subtitle || article.content.substring(0, 160).replace(/<[^>]*>?/gm, '') + '...'
+    const publishedTime = article.createdAt.toISOString()
+    const modifiedTime = article.updatedAt.toISOString()
+    const url = `https://debatersconvention.com/articles/${article.slug}`
+    const images = article.featuredImage ? [article.featuredImage] : []
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            type: 'article',
+            publishedTime,
+            modifiedTime,
+            url,
+            images,
+            authors: [article.author.username],
+            tags: article.tags.map(t => t.name),
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images,
+        },
+    }
+}
+
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
+
+    const article = await getArticle(slug)
 
     if (!article) {
         notFound()
@@ -31,7 +77,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
     const relatedArticles = await prisma.article.findMany({
         where: {
             slug: { not: slug },
-            status: 'PUBLISHED' // Assuming only published articles should be suggested
+            status: 'APPROVED' // Changed from PUBLISHED to APPROVED based on LandingPage query
         },
         take: 3,
         orderBy: { createdAt: 'desc' },
@@ -44,10 +90,41 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         }
     })
 
-    const fullUrl = `https://debatersconvention.com/articles/${article.slug}` // Replace domain with env var if available
+    const fullUrl = `https://debatersconvention.com/articles/${article.slug}`
+
+    // JSON-LD Structured Data
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: article.title,
+        description: article.subtitle || article.content.substring(0, 160).replace(/<[^>]*>?/gm, ''),
+        image: article.featuredImage ? [article.featuredImage] : [],
+        datePublished: article.createdAt.toISOString(),
+        dateModified: article.updatedAt.toISOString(),
+        author: {
+            '@type': 'Person',
+            name: article.author.name || article.author.username,
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'Debaters Convention',
+            logo: {
+                '@type': 'ImageObject',
+                url: 'https://debatersconvention.com/logo.png', // Placeholder URL
+            }
+        },
+        mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': fullUrl,
+        }
+    }
 
     return (
         <article className="container mx-auto py-10 max-w-3xl space-y-8">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <Button variant="ghost" asChild className="-ml-4 text-muted-foreground">
                 <Link href="/">
                     <ArrowLeft className="mr-2 h-4 w-4" />

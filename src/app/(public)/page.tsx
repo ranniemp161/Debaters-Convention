@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, BookOpen, Users, MessageSquare } from "lucide-react"
 import Image from "next/image"
-export const dynamic = 'force-dynamic'
+export const revalidate = 60
 
 export default async function LandingPage() {
   const featuredArticles = await prisma.article.findMany({
