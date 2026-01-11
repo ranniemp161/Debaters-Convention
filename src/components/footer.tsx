@@ -9,11 +9,15 @@ export function Footer() {
                     {/* Brand Column */}
                     <div className="space-y-6">
                         <Link href="/" className="flex items-center gap-2 mb-4 group">
-                            {/* Icon Placeholder */}
-                            <div className="text-white">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-square-quote h-6 w-6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /><path d="M8 12a2 2 0 0 0 2-2V8" /><path d="M16 8v2a2 2 0 0 0 2 2" /></svg>
+                            <img
+                                src="/logo.jpg"
+                                alt="Debaters Convention"
+                                className="h-14 w-14 object-cover rounded-full shadow-md ring-2 ring-primary/20 hover:ring-primary transition-all"
+                            />
+                            <div className="flex gap-1 font-serif font-bold text-xl tracking-tight leading-none group-hover:opacity-90 transition-opacity">
+                                <span className="text-[#CA8A04]">Debaters</span>
+                                <span className="text-primary">Convention</span>
                             </div>
-                            <span className="text-white text-lg font-bold italic tracking-tight font-serif group-hover:text-white/90 transition-colors">Debaters Convention</span>
                         </Link>
                         <p className="text-gray-500 text-sm leading-relaxed max-w-xs font-light">
                             Cultivating wisdom through clash of minds. The internet's premier destination for serious intellectual discourse.

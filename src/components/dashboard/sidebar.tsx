@@ -5,7 +5,8 @@ import {
     PenSquare,
     FileText,
     LogOut,
-    ExternalLink
+    ExternalLink,
+    Video
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -29,6 +30,12 @@ export async function Sidebar() {
                             <Link href="/admin">
                                 <FileText className="h-4 w-4" />
                                 Overview
+                            </Link>
+                        </Button>
+                        <Button asChild variant="ghost" className="w-full justify-start gap-2">
+                            <Link href="/admin/debates">
+                                <Video className="h-4 w-4" />
+                                Manage Debates
                             </Link>
                         </Button>
                         {/* Add more admin links here if needed */}

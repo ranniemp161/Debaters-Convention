@@ -11,8 +11,15 @@ export async function Navbar() {
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 <Link href="/" className="font-bold text-xl tracking-tight flex items-center gap-2">
-                    <span className="bg-primary text-primary-foreground text-xs px-1 rounded">DC</span>
-                    Debaters Convention
+                    <img
+                        src="/logo.jpg"
+                        alt="Debaters Convention"
+                        className="h-14 w-14 object-cover rounded-full shadow-md ring-2 ring-primary/20 hover:ring-primary transition-all"
+                    />
+                    <div className="flex gap-1 font-serif font-bold text-xl tracking-tight leading-none">
+                        <span className="text-[#CA8A04]">Debaters</span>
+                        <span className="text-primary">Convention</span>
+                    </div>
                 </Link>
 
                 <nav className="hidden md:flex items-center gap-6">
@@ -21,6 +28,9 @@ export async function Navbar() {
                     </Link>
                     <Link href="/articles" className="text-sm font-medium transition-colors hover:text-primary">
                         Articles
+                    </Link>
+                    <Link href="/debates" className="text-sm font-medium transition-colors hover:text-primary">
+                        Debates
                     </Link>
                     <Link href="/about" className="text-sm font-medium transition-colors hover:text-primary">
                         About

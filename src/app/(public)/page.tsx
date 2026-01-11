@@ -65,7 +65,7 @@ export default async function LandingPage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button asChild className="bg-[#C04928] hover:bg-[#A03518] text-white rounded-none px-8 py-7 text-lg font-semibold shadow-lg hover:shadow-xl transition-all">
-                  <Link href="/articles">
+                  <Link href="/debates">
                     Watch Latest Debate
                   </Link>
                 </Button>
