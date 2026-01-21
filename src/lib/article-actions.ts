@@ -50,7 +50,12 @@ async function uploadFile(file: File): Promise<string | null> {
 }
 
 export async function uploadEditorImage(formData: FormData) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
     if (!session || !session.user || session.user.role !== 'WRITER') {
         return { error: "Unauthorized" }
     }
@@ -72,7 +77,12 @@ export async function uploadEditorImage(formData: FormData) {
 }
 
 export async function createArticle(prevState: any, formData: FormData) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'WRITER') {
         return { message: "Unauthorized" }
@@ -142,7 +152,12 @@ export async function createArticle(prevState: any, formData: FormData) {
 }
 
 export async function updateArticle(articleId: string, prevState: any, formData: FormData) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'WRITER') {
         return { message: "Unauthorized" }

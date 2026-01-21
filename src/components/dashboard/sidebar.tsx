@@ -11,7 +11,13 @@ import {
 import { Button } from "@/components/ui/button"
 
 export async function Sidebar() {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch (e) {
+        console.error("Auth error:", e)
+        session = null
+    }
     const role = session?.user?.role
 
     return (

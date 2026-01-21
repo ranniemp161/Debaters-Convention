@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button"
 import { LayoutDashboard, LogOut, User } from "lucide-react"
 
 export async function Navbar() {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch (e) {
+        console.error("Auth error:", e)
+        session = null
+    }
 
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

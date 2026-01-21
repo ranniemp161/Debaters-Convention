@@ -54,8 +54,7 @@ export const BubbleMenu = React.forwardRef<HTMLDivElement, BubbleMenuProps>(
                 return
             }
 
-            if (!pluginEditor) {
-                console.warn('BubbleMenu component does not have editor prop.')
+            if (!pluginEditor || pluginEditor.isDestroyed || !pluginEditor.view?.dom) {
                 return
             }
 

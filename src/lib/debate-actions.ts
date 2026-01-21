@@ -12,7 +12,12 @@ const DebateSchema = z.object({
 })
 
 export async function createDebate(formData: FormData) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'ADMIN') {
         return { error: "Unauthorized" }
@@ -70,7 +75,12 @@ export async function getDebateById(id: string) {
 }
 
 export async function deleteDebate(id: string) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
     if (!session || !session.user || session.user.role !== 'ADMIN') {
         throw new Error("Unauthorized")
     }

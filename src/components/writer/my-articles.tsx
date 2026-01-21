@@ -12,7 +12,13 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export default async function WriterDashboard() {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch (e) {
+        console.error("Auth error:", e)
+        session = null
+    }
 
     if (!session?.user) return null
 

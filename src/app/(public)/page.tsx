@@ -9,7 +9,10 @@ export const revalidate = 60
 export default async function LandingPage() {
   const featuredArticles = await prisma.article.findMany({
     where: { status: 'APPROVED' },
-    include: { author: true },
+    include: {
+      author: true,
+      category: true
+    },
     orderBy: { createdAt: 'desc' },
     take: 3,
   })
@@ -176,10 +179,21 @@ export default async function LandingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 pt-2 flex-1 flex flex-col justify-between">
-                <div
-                  className="line-clamp-3 text-muted-foreground text-sm leading-relaxed mb-4"
-                  dangerouslySetInnerHTML={{ __html: article.content }}
-                />
+                <p className="line-clamp-3 text-muted-foreground text-sm leading-relaxed mb-4">
+                  {(() => {
+                    const stripHtml = (html: string) => {
+                      const tmp = document.createElement("DIV");
+                      tmp.innerHTML = html;
+                      return tmp.textContent || tmp.innerText || "";
+                    }
+                    // Since this is a server component, we can't use document.createElement easily if it renders on server. 
+                    // However, page.tsx is a server component by default (no 'use client').
+                    // We should use a regex or a server-side friendly way.
+
+                    const plainText = article.content.replace(/<[^>]*>?/gm, '');
+                    return plainText.length > 150 ? plainText.substring(0, 150) + "..." : plainText;
+                  })()}
+                </p>
                 <Link href={`/articles/${article.slug}`} className="text-primary text-sm font-bold inline-flex items-center hover:underline uppercase tracking-wide">
                   Read More <ArrowRight className="ml-1 h-3 w-3" />
                 </Link>
@@ -196,19 +210,37 @@ export default async function LandingPage() {
       </section>
 
       {/* Footer CTA */}
-      <section className="bg-primary text-primary-foreground py-24">
-        <div className="container px-4 md:px-6 text-center space-y-6">
-          <h2 className="text-3xl md:text-5xl font-bold">Join the Conversation</h2>
-          <p className="text-primary-foreground/90 max-w-2xl mx-auto text-lg md:text-xl">
-            Be part of a community that values diverse perspectives and thoughtful dialogue.
+      <section className="bg-background py-24 relative overflow-hidden">
+        {/* Decorative Quote */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40rem] font-serif text-muted/5 leading-none select-none pointer-events-none z-0">
+          ”
+        </div>
+
+        <div className="container px-4 md:px-6 text-center relative z-10">
+          <p className="text-[#C04928] font-bold tracking-[0.2em] text-xs uppercase mb-6">
+            Community
           </p>
-          <div className="pt-4">
-            <Button asChild variant="secondary" size="lg" className="h-12 px-8 font-bold text-base">
-              <Link href="/contact">
-                Get in Touch
-              </Link>
+
+          <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 text-foreground tracking-tight">
+            Join the Intellectual Arena
+          </h2>
+
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg md:text-xl leading-relaxed mb-10 font-light">
+            Connect with thousands of thinkers, philosophers, and theologians. Engage in structured
+            debates, publish your essays, and challenge the status quo.
+          </p>
+
+          <div className="flex justify-center">
+            <Button asChild className="bg-[#C04928] hover:bg-[#A03518] text-white h-12 px-8 text-base font-semibold shadow-lg hover:shadow-xl transition-all">
+              <a href="https://discord.gg/XUXMd54a" target="_blank" rel="noopener noreferrer">
+                Join our Discord
+              </a>
             </Button>
           </div>
+
+          <p className="text-xs text-muted-foreground mt-6">
+            Free to join. Respectful discourse required.
+          </p>
         </div>
       </section>
     </div>

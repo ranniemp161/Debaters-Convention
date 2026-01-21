@@ -6,7 +6,12 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 
 export async function updateArticleStatus(articleId: string, status: string) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'ADMIN') {
         return { message: "Unauthorized" }
@@ -36,7 +41,12 @@ export async function updateArticleStatus(articleId: string, status: string) {
 }
 
 export async function deleteUser(userId: string) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'ADMIN') {
         return { message: "Unauthorized" }
@@ -54,7 +64,12 @@ export async function deleteUser(userId: string) {
 }
 
 export async function deleteArticle(articleId: string) {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch {
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'ADMIN') {
         return { message: "Unauthorized" }

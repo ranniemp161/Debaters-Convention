@@ -18,7 +18,13 @@ import { Plus } from "lucide-react"
 export const dynamic = 'force-dynamic'
 
 export default async function WriterDashboard() {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch (e) {
+        console.error("Auth error:", e)
+        session = null
+    }
 
     if (!session || !session.user) {
         redirect('/')

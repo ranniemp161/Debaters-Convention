@@ -4,7 +4,13 @@ import { redirect } from "next/navigation"
 import { AdminArticlePanel } from "@/components/admin/article-panel"
 
 export default async function AdminPage() {
-    const session = await auth()
+    let session
+    try {
+        session = await auth()
+    } catch (e) {
+        console.error("Auth error:", e)
+        session = null
+    }
 
     if (!session || !session.user || session.user.role !== 'ADMIN') {
         redirect('/')

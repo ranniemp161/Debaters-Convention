@@ -34,10 +34,7 @@ export const FloatingMenu = React.forwardRef<HTMLDivElement, FloatingMenuProps>(
 
             const attachToEditor = editor
 
-            if (!attachToEditor) {
-                console.warn(
-                    'FloatingMenu component does not have editor prop.',
-                )
+            if (!attachToEditor || attachToEditor.isDestroyed || !attachToEditor.view?.dom) {
                 return
             }
 
