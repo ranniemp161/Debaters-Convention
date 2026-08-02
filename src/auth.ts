@@ -6,8 +6,11 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { authConfig } from "./auth.config"
 
+const authSecret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET ?? "dev-secret-change-me"
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
+    secret: authSecret,
     adapter: PrismaAdapter(prisma) as any,
     providers: [
         Credentials({
